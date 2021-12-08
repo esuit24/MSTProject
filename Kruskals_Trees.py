@@ -1,4 +1,6 @@
 #this algorithm implements Kruskal's with trees
+import sys
+from sys import argv
 class Edge:
     def __init__(self, vertexOne, vertexTwo, weight):
         self.v1 = vertexOne
@@ -49,6 +51,7 @@ numVertices = int(nums[0])
 numEdges = int(nums[1])
 
 edges = []
+tree = []
 
 for line in lines:
     if line is not lines[0] and line is not lines[-1]:
@@ -59,8 +62,8 @@ for line in lines:
 parent = []
 
 def makeSets(graph):
-    for i in range((len(graph))):
-        parent[i] = i
+    for i in range(len(graph)-1):
+        parent.append(i)
 
 #find is used to find what set i and j are in, returns
 #what the parent is of i
@@ -76,4 +79,19 @@ def union(i,j):
     parent[i] = j
 
 def main():
-    makeSets(len(edges))
+    makeSets(edges)
+    quickSort(edges,0,len(edges)-1)
+    #find each vertex
+    for i in range(len(edges)-1):
+        edge = edges[i]
+        set1 = find(edge.v1) #find parents
+        set2 = find(edge.v2) #find parents
+        if (set1 != set2):
+            union(set1, set2)
+            tree.append(edges[i])
+    #check:
+    sum = 0
+    for k in range(len(tree)):
+        sum += tree[k].w
+    print(sum)
+main()
