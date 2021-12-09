@@ -56,7 +56,7 @@ tree = []
 for line in lines:
     if line is not lines[0] and line is not lines[-1]:
         l = line.split()
-        e = Edge(l[0], l[1], l[2])
+        e = Edge(int(l[0]), int(l[1]), float(l[2]))
         edges.append(e)
 
 parent = []
