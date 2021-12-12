@@ -1,0 +1,31 @@
+Run time analysis of Kruskal's with trees:
+
+makeSets = O(n)
+- Sets each vertex's parent in input as itself, which takes linear time with
+respect to the number of vertices
+
+quickSort = O(nlogn)
+
+Iteration through edges = O(m)
+    First find = O(n)
+    Second find = O(n)
+        - Find parent of i by going up the tree, time to find parent is
+        proportional to the height of the tree so this can take linear time
+        with respect to the number of vertices
+
+    Union = O(1)
+        - Set parent of one vertex as the parent of the other, assignment can
+        be made in constant time
+    tree.append = O(1)
+        - Appending to list can be done in constant time
+
+Iteration through tree = O(m)
+- Summing all edges in tree can be done in linear time with respect to the
+ number of edges by iterating through the edges in the tree
+
+
+Run time for makesets and quicksort = O(nlogn)
+Run time for finds = O(mn)
+Run time for Final iteration = O(m)
+
+Therefore the total run time = O(nlogn + mn) 
