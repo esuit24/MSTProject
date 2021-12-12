@@ -1,7 +1,10 @@
 #this algorithm implements Kruskal's with trees
 import sys
 from sys import argv
+
+#initialize edge class
 class Edge:
+    #edge has 2 vertex attributes and a weight
     def __init__(self, vertexOne, vertexTwo, weight):
         self.v1 = vertexOne
         self.v2 = vertexTwo
@@ -10,6 +13,8 @@ class Edge:
     def print():
         print(v1 + " " + v2 + " " + w)
 
+#quick sort: sorts elements in array arr recursively
+#given indicies of first and last elements to be sorted
 def quickSort(arr, low, high):
     if len(arr) == 1:
         print("returning")
@@ -28,6 +33,10 @@ def quickSort(arr, low, high):
         # sorts elements after partition
         quickSort(arr, pi + 1, high)
 
+#takes in array, arr, to be partitioned and
+#indicies that correspond to first and last elements
+#to be partitioned
+#returns the index to partition at
 def partition(arr, low, high):
     # index of smaller element
     i = (low - 1)
@@ -44,12 +53,14 @@ def partition(arr, low, high):
     arr[i + 1], arr[high] = arr[high], arr[i + 1]
     return int(i + 1)
 
+#file read in
 file = open(argv[1], "r")
 lines = lines = file.readlines()
 nums = lines[0].split()
 numVertices = int(nums[0])
 numEdges = int(nums[1])
 
+#set empty list of edges and verticies of tree
 edges = []
 tree = []
 
@@ -58,40 +69,48 @@ for line in lines:
         l = line.split()
         e = Edge(int(l[0]), int(l[1]), float(l[2]))
         edges.append(e)
-
+#sets parent array to hold parent of each vertex
+#in tree
 parent = []
 
+#initializes parent of each vertex to itself
 def makeSets(graph):
     for i in range(len(graph)-1):
         parent.append(i)
 
-#find is used to find what set i and j are in, returns
-#what the parent is of i
+#takes in vertex as input
+#returns the parent of a given vertex i
 def find(i):
-    #keep going through until you get to the node
+    #iterates through until gets to the node
     #where i is its own parent (root)
     while (parent[i] != i):
         i = parent[i]
     #return owner of set
     return i
 
+#takes in names of set owners to be unioned
+#unions sets by assigning parent of one to parent of
+#other
 def union(i,j):
     parent[i] = j
 
+#main method
 def main():
     makeSets(edges)
     quickSort(edges,0,len(edges)-1)
-    #find each vertex
+    #iterates through edges in tree in sorted order
     for i in range(len(edges)-1):
         edge = edges[i]
         set1 = find(edge.v1) #find parents
         set2 = find(edge.v2) #find parents
-        if (set1 != set2):
+        if (set1 != set2): #add to tree if not in cycle
             union(set1, set2)
             tree.append(edges[i])
-    #check:
+    #sum total weight
     sum = 0
     for k in range(len(tree)):
         sum += tree[k].w
+    #print final weight
     print(sum)
+#execute algorithm
 main()
