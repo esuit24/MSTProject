@@ -4,7 +4,9 @@ Initial overhead: Putting all the edges into an array is O(m * 1)
                   - goes line by line through file and adds to array of edges for m edges
                   Putting all vertices into individual sets is O(n * 1)
                   - initially, each vertex is put in its own set for n vertices
-                  Quick sort is O(mlogm)
+                  Quick sort is O(m^2) in the worst case, but the expected case is O(mlogm)
+                  - another sort like merge sort would have worst case O(mlogm) time,
+                    so that will be used for the rest of this analysis
                   - quick sorting m objects
 
                   for e in edges is θ(m)
@@ -18,4 +20,4 @@ Initial overhead: Putting all the edges into an array is O(m * 1)
                   this for loop amounts to θ(2n^2) which simplifies to θ(n^2)
 
                   adding this to the overhead at the beginning, O(m + n + mlogm + n^2)
-                  this simplifies to O(m + n^2)
+                  this simplifies to O(mlogm + n^2)
