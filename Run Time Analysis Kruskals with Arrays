@@ -1,0 +1,21 @@
+Run Time Analysis for Kruskals with Arrays
+
+Initial overhead: Putting all the edges into an array is O(m * 1)
+                  - goes line by line through file and adds to array of edges for m edges
+                  Putting all vertices into individual sets is O(n * 1)
+                  - initially, each vertex is put in its own set for n vertices
+                  Quick sort is O(mlogm)
+                  - quick sorting m objects
+
+                  for e in edges is θ(m)
+                      two finds is θ(2*1)
+                      each time the two finds return different results,
+                          union the two sets is θ(n)
+                          --> because this will only happen once for each vertex,
+                              the time complexity of these nested for loops is
+                              θ(2 * n^2)
+
+                  this for loop amounts to θ(2n^2) which simplifies to θ(n^2)
+
+                  adding this to the overhead at the beginning, O(m + n + mlogm + n^2)
+                  this simplifies to O(m + n^2)
