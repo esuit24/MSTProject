@@ -1,32 +1,32 @@
 import sys
 from sys import argv
 import numpy as np
-import turtle as t
 import math
 import time
 from graphics import *
 
+#read in files
 file = open(argv[1], "r")
 lines = file.readlines()
 nums = lines[0].split()
 numVerticies = int(nums[0])
-print("NUM: " + str(numVerticies))
 numEdges = int(nums[1])
+#holds vertex and edge information from file
 graph = []
+#add information to array data structure from file
 for line in lines:
     if line is not lines[0] and line is not lines[-1]:
         l = line.split()
         val = [int(l[0]), int(l[1]), float(l[2])]
         graph.append(val)
-print(graph)
-#storing the graph: list of vertex tuples, list of edge weights
+
 parent = np.zeros((numVerticies,))
 best_weight = np.zeros((numVerticies,))
 starting_vertex = graph[0][0]
 for i in range(numVerticies):
     parent[i] = starting_vertex
     best_weight[i] = float('inf')
-print(numVerticies)
+
 
 def draw_edge(v1, v2): #this function draws an edeg from vertex v1 to vertex v2
     x1=740 # radius of 340 + 400 for the central x point on the screen
@@ -67,27 +67,26 @@ def compute_tree():
         line.draw(win2)
     #set tree as empty
 
-    verticies_in_tree = []
+    #set data structures to store edge and verticies in tree
     edges_in_tree = []
-    verticies_to_check = graph
-    print("Length: " + str(len(verticies_to_check)))
-    weight = 0
     verticies_in_tree = [0]
-    #set initial starting vertex
-    for i in range(numVerticies-1): #add verticies-1 edges to tree
+    verticies_to_check = graph
+    #weight of MST
+    weight = 0
+    for i in range(numVerticies-1): #add number of verticies-1 edges to tree
         #pick min cost edge between vertex in tree and vertex not in tree
-        #print("print")
         best_edge = float('inf')
+        #initialize vertex to add to tree
         add_vertex = (None, None)
+        #initialize index of vertex added to tree
         index = None
         for e in range(len(verticies_to_check)):
             if (verticies_to_check[e][0] in verticies_in_tree and
             verticies_to_check[e][2] < best_edge and verticies_to_check[e][1] not in verticies_in_tree):
-            #also check if the other end of vertex is in tree already
-            #v1 in tree, v2 not in tree
-                best_edge = verticies_to_check[e][2]
-                add_vertex = [verticies_to_check[e][0], verticies_to_check[e][1]]
-                index = e
+            #if v1 in tree, v2 not in tree
+                best_edge = verticies_to_check[e][2] #set as new best edge seen
+                add_vertex = [verticies_to_check[e][0], verticies_to_check[e][1]] #set vertex pair to be added in the form (parent, new vertex)
+                index = e #set index of vertex/edge added to tree
                 line=draw_edge(verticies_to_check[e][0], verticies_to_check[e][1])
                 line.setFill('cyan') #edge in cyan represents edge being processed
                 line.draw(win2)
@@ -97,10 +96,10 @@ def compute_tree():
                 line.draw(win2)
             elif (verticies_to_check[e][1] in verticies_in_tree and
             verticies_to_check[e][2] < best_edge and verticies_to_check[e][0] not in verticies_in_tree):
-            #v2 in tree, v1 not in tree
-                best_edge = verticies_to_check[e][2]
-                add_vertex = [verticies_to_check[e][1], verticies_to_check[e][0]]
-                index = e
+            #if v2 in tree, v1 not in tree
+                best_edge = verticies_to_check[e][2] #set as new best edge seen
+                add_vertex = [verticies_to_check[e][1], verticies_to_check[e][0]] #set vertex pair to be added,in the form (parent, new vertex)
+                index = e #set index of vertex/edge added to tree
                 line=draw_edge(verticies_to_check[e][0], verticies_to_check[e][1])
                 line.setFill('cyan') #edge in cyan represents edge being processed
                 line.draw(win2)
@@ -109,18 +108,14 @@ def compute_tree():
                 line.setFill('black')
                 line.draw(win2)
 
-                #find a vertex that makes an edge with starting vertex
         #add new vertex to list of verticies, remove from original
-        #print("AV: x" + str(add_vertex[1]))
-        verticies_in_tree.append(add_vertex[1])
+        verticies_in_tree.append(add_vertex[1]) #add new vertex to tree
         v1=add_vertex[0]
         v2=add_vertex[1]
 
         line=draw_edge(v1, v2)
         line.setFill('DeepPink') #pink edge represents edge in MST.
         line.draw(win2)
-        #print("VIT2: " + str(verticies_in_tree))
-        #print(index)
         verticies_to_check.pop(index)
         #add new edge to tree, remove from original
         edges_in_tree.append(best_edge)#already removed from graph
@@ -130,11 +125,10 @@ def compute_tree():
         curr_v = add_vertex[1]
         parent[curr_v] = add_vertex[0]
         best_weight[curr_v] = best_edge #best edge
-        #print("Best Weight: " + str(best_edge))
+
         weight += best_edge
-    #print("Weight: " + str(weight))
-    print("Weights: " + str(best_weight))
-    print("edges: " + str(verticies_in_tree))
+
+    print("Edges: " + str(verticies_in_tree))
     print("Final Weight: " + str(weight))
     win2.getMouse()
     win2.close()
