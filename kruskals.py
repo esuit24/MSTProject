@@ -7,6 +7,9 @@ import time
 from graphics import *
 import math
 
+#class edge to store an edge and the two vertices it connects
+#also stores the weight of each edge
+
 class Edge:
     def __init__(self, vertexOne, vertexTwo, weight):
         self.v1 = vertexOne
@@ -83,11 +86,17 @@ def draw_vertex(v1, numVertices): #draws a vertex
     #label.draw(win2)
     return circ
 
-file = open(argv[1], "r")
+#main function
+
+file = open(argv[1], "r") #opens file
+#saves file data as variable
 lines = file.readlines()
+#removes first line of file to get #vertices and #edges
 nums = lines[0].split()
 numVertices = int(nums[0])
 numEdges = int(nums[1])
+
+#increases recursion depth for quick sort
 
 print("E: " + str(numEdges) + " V: " + str(numVertices))
 sys.setrecursionlimit(3000)
@@ -95,12 +104,14 @@ sys.setrecursionlimit(3000)
 globalMin = sys.maxsize
 weightMST = 0
 edges = []
+#list of sets to which each vertex belongs
 sets = []
 
 win2=GraphWin("Table", 800, 800)
 x1=750# radius of 350 + 400 for the central x point on the screen
 y1=400#this represents the central y point of the screen
 angle=(2*math.pi)/numVerticies #finds the angle between any two consecutive verticies
+
 for i in range(numVerticies): #draws circles for vertices.
     h=math.sqrt((500**2)* (1-math.cos(angle*(1+i)) ) ) #heuristic value
     x2=x1-h*math.sin(angle*(i+1)/2) #x value of center of vertex
@@ -112,7 +123,7 @@ for i in range(numVerticies): #draws circles for vertices.
     label.draw(win2)
 
 
-for line in lines:
+for line in lines: #processes file data into a list of edges
     if line is not lines[0] and line is not lines[-1]:
         l = line.split()
         e = Edge(l[0], l[1], l[2])
@@ -124,17 +135,17 @@ for i in range(numEdges): #draws all edges in the graph
     line=draw_edge(v1,v2)
     line.draw(win2)
 
-for i in range(numVertices):
+for i in range(numVertices):#initially, each vertex belongs to its own set
     sets.append({i})
 
 print("Quick sorting")
-quickSort(edges, 0, len(edges) - 1)
+quickSort(edges, 0, len(edges) - 1) #presorts edges from least to greatest
 
 print("sorting complete")
 
 for e in edges:
-    first = int(find(sets, e.v1))
-    second = int(find(sets, e.v2))
+    first = int(find(sets, e.v1))#find(v1)
+    second = int(find(sets, e.v2))#find(v2)
     circ1= draw_vertex(first, numVertices)
     circ2= draw_vertex(second, numVertices)
     circ2.setOutline("cyan")
@@ -142,14 +153,7 @@ for e in edges:
     circ1.setOutline("cyan")
     circ1.draw(win2) #draws nodes being processed in cyan
 
-    #if second is None:
-    #    print("EDGE INVALID: " + e.v1 + " " + e.v2)
-    #    print(sets)
-
-    #print(int(first))
-    #print(int(second))
-
-    if first != second:
+    if first != second: #ensures the set with the larger index is disappearing for consistency
         line=draw_edge(int(e.v1),int(e.v2))
         line.setFill('DeepPink')
         line.draw(win2) #draws MST in pink
